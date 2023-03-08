@@ -154,3 +154,18 @@ git clone https://github.com/ocp-run/selfhealinginfra
 cd mw-apps
 ./provision.sh
 ```
+
+
+Run the load test and verify the closed loop.
+Next step is to validate if the infracture will scale itsself based on the load or in case of a missing route.
+Here is a sample load test you can run (using the hey tool):
+```
+#!/bin/sh
+for i in {1..8}
+do
+    requests=$((100+50*i));echo "output: iteration $i";
+    ./hey -c $requests -q 1 -z 30s -m GET <app_URL>
+done
+#run at constant high load for 10 minutes
+./hey -c 500 -q 1 -z 10m -m GET <app_URL>
+```
